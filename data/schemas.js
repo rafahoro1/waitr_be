@@ -13,15 +13,16 @@ var locationSchema = mongoose.Schema({
   longitude:Number
 });
 
+var reviewSchema = mongoose.Schema({
+  rating: { type: Number, min: 1, max: 5 },
+  description: String
+});
+
 var driverReviewSchema = mongoose.Schema({
   driver_id: Schema.Types.ObjectId,
   review_id: Schema.Types.ObjectId
 });
 
-var reviewSchema = mongoose.Schema({
-  rating: { type: Number, min: 1, max: 5 },
-  description: String
-});
 
 
 var Driver = mongoose.model('Driver', driverSchema);
