@@ -1,7 +1,5 @@
 'use strict';
 var Q = require('q');
-var fs = require('fs');
-var _ = require('underscore');
 var schemas = require('../../data/schemas.js');
 
 var Driver = schemas.Driver;
@@ -103,7 +101,7 @@ function fillTableDriverReview() {
     let saveItems = [];
     reviews.forEach((rev) => {
       let drv = drivers[Math.floor(Math.random() * drivers.length)];
-      let item = new DriverReview({driver_id: drv._id, review_id: rev._id})
+      let item = new DriverReview({driver_id: drv._id, review_id: rev._id});
       saveItems.push(item.save());
     });
     return Q.all(saveItems);
