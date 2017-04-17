@@ -29,6 +29,7 @@ Test('/drivers/{driverId}', function (t) {
          * responses: 200, 404
          */
     t.test('test GetDriver get operation', function (t) {
+      //path: '/drivers/dr_3',
       Mockgen().requests({
         path: '/drivers/{driverId}',
         operation: 'get'

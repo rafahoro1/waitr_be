@@ -1,39 +1,39 @@
 'use strict';
-var Mockgen = require('../mockgen.js');
+'use strict';
+var Q = require('q');
+var _ = require('underscore');
+var schemas = require('../../data/schemas.js');
+
+var Driver = schemas.Driver;
+var Location = schemas.Location;
+
 /**
  * Operations on /drivers/{driverId}
  */
 module.exports = {
-    /**
-     * summary: 
-     * description: 
-     * parameters: 
-     * produces: 
-     * responses: 200, 404
-     * operationId: GetDriver
-     */
-  get: {
-    200: function (req, res, callback) {
-            /**
-             * Using mock data generator module.
-             * Replace this by actual data for the api.
-             */
-      Mockgen().responses({
-        path: '/drivers/{driverId}',
-        operation: 'get',
-        response: '200'
-      }, callback);
-    },
-    404: function (req, res, callback) {
-            /**
-             * Using mock data generator module.
-             * Replace this by actual data for the api.
-             */
-      Mockgen().responses({
-        path: '/drivers/{driverId}',
-        operation: 'get',
-        response: '404'
-      }, callback);
-    }
+  /**
+   * summary:
+   * description:
+   * parameters: driverId: driver.id (not driver._id)
+   * produces:
+   * operationId: GetDriver
+   */
+  get: function (driverId) {
+    return Driver.findOne({id: driverId}).then(function (driver) {
+      if (!driver) {
+        return driver;
+      }
+      return Location.findOne({_id: driver.current_location_id})
+        .then(function (loc) {
+          return {
+            id: driver.id,
+            name: driver.name,
+            current_location: {
+              latitude: loc.latitude,
+              longitude: loc.longitude
+            }
+          }
+        })
+    });
   }
 };
