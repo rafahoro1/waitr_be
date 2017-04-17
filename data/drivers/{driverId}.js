@@ -12,10 +12,13 @@ var Location = schemas.Location;
  */
 module.exports = {
   /**
-   * summary:
-   * description:
-   * parameters: driverId: driver.id (not driver._id)
-   * produces:
+   * summary: Get a driver
+   * description:  Get a driver. It merges objects from different collections ('drivers' and 'locations') to create a
+   * consolidated object. It may make more sense to get a parameter to know if such (time/resources costly) action
+   * is necessary for the caller, and if not, just return the current_location_id, instead of the object. However, for
+   * code simplicity, I just fill the data.
+   * parameters: driverId: driver.id (not driver._id). The id of the driver (as set by the FrontEnd/Client, not by the DB)
+   * produces: A Driver object as specified in the conf/swagger.yaml  ('#/definitions/Driver') file
    * operationId: GetDriver
    */
   get: function (driverId) {

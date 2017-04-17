@@ -1,4 +1,10 @@
 'use strict';
+/*
+ * Use this script, to fill the DB with some data
+ * You can run this with 'npm run fixtures'
+ * @type {*|exports|module.exports}
+ */
+
 var Q = require('q');
 var schemas = require('../../data/schemas.js');
 
@@ -6,9 +12,11 @@ var Driver = schemas.Driver;
 var Location = schemas.Location;
 var Review = schemas.Review;
 var DriverReview = schemas.DriverReview;
-
 var mongoose = schemas.mongoose;
 
+/*
+ * Create the mock data
+ */
 var locations = [
   {'latitude': 1.1, 'longitude': 1.2},
   {'latitude': 2.1, 'longitude': 2.2},
@@ -39,30 +47,13 @@ var reviews = [
   {rating: 4, description: 'description 12'}
 ];
 
-mongoose.connection.on('connected', function () {
-  mongoose.connection.dropDatabase()
-    .then(function () {
-      return fillTableLocations();
-    })
-    .then(function () {
-      return fillTableDrivers();
-    })
-    .then(function () {
-      return fillTableReviews();
-    })
-    .then(function () {
-      return fillTableDriverReview();
-    })
-    .then(function () {
-      mongoose.disconnect();
-    })
-    .catch(function (error) {
-      console.error(error);
-    })
-    .done();
-});
 
-function fillTableLocations() {
+/*
+ * Methods to fill the Collections with the Mock data defined above
+ */
+
+
+function fillCollectionLocations() {
   let saveItems = [];
   locations.forEach((data)=> {
     let item = new Location(data);
@@ -72,7 +63,7 @@ function fillTableLocations() {
 }
 
 
-function fillTableDrivers() {
+function fillCollectionDrivers() {
   return Location.find().then(function (locations) {
     let saveItems = [];
     drivers.forEach((drv)=> {
@@ -87,7 +78,7 @@ function fillTableDrivers() {
   });
 }
 
-function fillTableReviews() {
+function fillCollectionReviews() {
   let saveItems = [];
   reviews.forEach((data)=> {
     let item = new Review(data);
@@ -96,7 +87,7 @@ function fillTableReviews() {
   return Q.all(saveItems);
 }
 
-function fillTableDriverReview() {
+function fillCollectionDriverReview() {
   return Q.spread([Driver.find(), Review.find()], function (drivers, reviews) {
     let saveItems = [];
     reviews.forEach((rev) => {
@@ -106,5 +97,33 @@ function fillTableDriverReview() {
     });
     return Q.all(saveItems);
   });
+
+  /**
+   * DB is connected.
+   * Let fill the tables/collections with some mock data
+   */
+  mongoose.connection.on('connected', function () {
+    mongoose.connection.dropDatabase()
+      .then(function () {
+        return fillCollectionLocations();
+      })
+      .then(function () {
+        return fillCollectionDrivers();
+      })
+      .then(function () {
+        return fillCollectionReviews();
+      })
+      .then(function () {
+        return fillCollectionDriverReview();
+      })
+      .then(function () {
+        mongoose.disconnect();
+      })
+      .catch(function (error) {
+        console.error(error);
+      })
+      .done();
+  });
+
 }
 
