@@ -97,33 +97,34 @@ function fillCollectionDriverReview() {
     });
     return Q.all(saveItems);
   });
-
-  /**
-   * DB is connected.
-   * Let fill the tables/collections with some mock data
-   */
-  mongoose.connection.on('connected', function () {
-    mongoose.connection.dropDatabase()
-      .then(function () {
-        return fillCollectionLocations();
-      })
-      .then(function () {
-        return fillCollectionDrivers();
-      })
-      .then(function () {
-        return fillCollectionReviews();
-      })
-      .then(function () {
-        return fillCollectionDriverReview();
-      })
-      .then(function () {
-        mongoose.disconnect();
-      })
-      .catch(function (error) {
-        console.error(error);
-      })
-      .done();
-  });
-
 }
+
+
+/**
+ * DB is connected.
+ * Let fill the tables/collections with some mock data
+ */
+mongoose.connection.on('connected', function () {
+  mongoose.connection.dropDatabase()
+    .then(function () {
+      return fillCollectionLocations();
+    })
+    .then(function () {
+      return fillCollectionDrivers();
+    })
+    .then(function () {
+      return fillCollectionReviews();
+    })
+    .then(function () {
+      return fillCollectionDriverReview();
+    })
+    .then(function () {
+      mongoose.disconnect();
+    })
+    .catch(function (error) {
+      console.error(error);
+    })
+    .done();
+});
+
 

@@ -1,7 +1,5 @@
 'use strict';
 'use strict';
-var Q = require('q');
-var _ = require('underscore');
 var schemas = require('../../data/schemas.js');
 
 var Driver = schemas.Driver;
@@ -35,8 +33,8 @@ module.exports = {
               latitude: loc.latitude,
               longitude: loc.longitude
             }
-          }
-        })
+          };
+        });
     });
   }
 };
