@@ -49,6 +49,26 @@ Test('/drivers/{driverId}', function (t) {
       });
     });
 
+    t.test('test GetDriver get driver without location operation', function (t) {
+      var request = Request(server)
+        .get('/drivers/dr_nr')
+        .end(function (err, res) {
+          t.error(err, 'No error');
+          t.equals(200, res.statusCode, 'response status');
+          var Validator = require('is-my-json-valid');
+          var validate = Validator(api.paths['/drivers/{driverId}']['get']['responses']['200']['schema']);
+          var response = res.body;
+          t.ok(validate(response), 'Valid response:');
+          t.error(validate.errors, 'No validation errors');
+          t.same({
+            "id": 'dr_nr',
+            "name": 'no review/location driver',
+            "current_location": {}
+          }, response, 'Returned driver');
+          t.end();
+        });
+    });
+
     t.test('test GetDriver get unexisting driver operation', function (t) {
       var request = Request(server)
         .get('/drivers/dr_unexisting')
