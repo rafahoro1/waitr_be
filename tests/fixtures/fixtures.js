@@ -64,7 +64,7 @@ function fillCollectionLocations() {
 
 
 function fillCollectionDrivers() {
-  return Location.find({},undefined,{sort:{latitude:1}}).then(function (locations) {
+  return Location.find({}, undefined, {sort: {latitude: 1}}).then(function (locations) {
     let saveItems = [];
     drivers.forEach((drv, idx)=> {
       let loc = locations[Math.floor(idx % locations.length)];
@@ -88,15 +88,18 @@ function fillCollectionReviews() {
 }
 
 function fillCollectionDriverReview() {
-  return Q.spread([Driver.find(), Review.find()], function (drivers, reviews) {
-    let saveItems = [];
-    reviews.forEach((rev) => {
-      let drv = drivers[Math.floor(Math.random() * drivers.length)];
-      let item = new DriverReview({driver_id: drv._id, review_id: rev._id});
-      saveItems.push(item.save());
+  return Q.spread(
+    [Driver.find({}, undefined, {sort: {id: 1}}),
+      Review.find({}, undefined, {sort: {description: 1}})],
+    function (drivers, reviews) {
+      let saveItems = [];
+      reviews.forEach((rev, idx) => {
+        let drv = drivers[Math.floor(idx % drivers.length)];
+        let item = new DriverReview({driver_id: drv._id, review_id: rev._id});
+        saveItems.push(item.save());
+      });
+      return Q.all(saveItems);
     });
-    return Q.all(saveItems);
-  });
 }
 
 
@@ -118,6 +121,11 @@ mongoose.connection.on('connected', function () {
     })
     .then(function () {
       return fillCollectionDriverReview();
+    })
+    .then(function(){
+      // Add a driver without review nor location
+      let item = new Driver({'id': 'dr_nr', 'name': 'no review/location driver'});
+      return item.save();
     })
     .then(function () {
       mongoose.disconnect();

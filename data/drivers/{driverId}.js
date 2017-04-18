@@ -26,13 +26,16 @@ module.exports = {
       }
       return Location.findOne({_id: driver.current_location_id})
         .then(function (loc) {
+          let currLoc = loc ?
+          {
+            latitude: loc.latitude,
+            longitude: loc.longitude
+          }
+            : {};
           return {
             id: driver.id,
             name: driver.name,
-            current_location: {
-              latitude: loc.latitude,
-              longitude: loc.longitude
-            }
+            current_location:currLoc
           };
         });
     });

@@ -19,6 +19,6 @@ module.exports = {
         res.send(404, 'The driver does not exist. ' + req.params.driverId);
       }
       next();
-    });
+    }).done();
   }
 };
