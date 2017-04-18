@@ -4,8 +4,9 @@ var Restify = require('restify');
 var Swaggerize = require('swaggerize-restify');
 var Path = require('path');
 var Request = require('supertest');
-var Mockgen = require('../../data/mockgen.js');
 var Parser = require('swagger-parser');
+var mongoose= require('../../data/dbConnection.js').mongoose;
+
 /**
  * Test for /drivers/{driverId}
  */
@@ -21,56 +22,47 @@ Test('/drivers/{driverId}', function (t) {
   Parser.validate(apiPath, function (err, api) {
     t.error(err, 'No parse error');
     t.ok(api, 'Valid swagger api');
-        /**
-         * summary: 
-         * description: 
-         * parameters: 
-         * produces: 
-         * responses: 200, 404
-         */
+    /**
+     * summary:
+     * description:
+     * parameters:
+     * produces:
+     * responses: 200, 404
+     */
     t.test('test GetDriver get operation', function (t) {
-      //path: '/drivers/dr_3',
-      Mockgen().requests({
-        path: '/drivers/{driverId}',
-        operation: 'get'
-      }, function (err, mock) {
-        var request;
-        t.error(err);
-        t.ok(mock);
-        t.ok(mock.request);
-                //Get the resolved path from mock request
-                //Mock request Path templates({}) are resolved using path parameters
-        request = Request(server)
-                    .get('' + mock.request.path);
-        if (mock.request.body) {
-                    //Send the request body
-          request = request.send(mock.request.body);
-        } else if (mock.request.formData) {
-                    //Send the request form data
-          request = request.send(mock.request.formData);
-                    //Set the Content-Type as application/x-www-form-urlencoded
-          request = request.set('Content-Type', 'application/x-www-form-urlencoded');
-        }
-                // If headers are present, set the headers.
-        if (mock.request.headers && mock.request.headers.length > 0) {
-          Object.keys(mock.request.headers).forEach(function (headerName) {
-            request = request.set(headerName, mock.request.headers[headerName]);
-          });
-        }
-        request.end(function (err, res) {
+      var request = Request(server)
+      .get('/drivers/dr_3')
+      .end(function (err, res) {
+        t.error(err, 'No error');
+        t.equals(200, res.statusCode, 'response status');
+        var Validator = require('is-my-json-valid');
+        var validate = Validator(api.paths['/drivers/{driverId}']['get']['responses']['200']['schema']);
+        var response = res.body;
+        t.ok(validate(response), 'Valid response:');
+        t.error(validate.errors, 'No validation errors');
+        t.same({
+          "id": "dr_3",
+          "name": "name3",
+          "current_location": {"latitude": 3.1, "longitude": 3.2}
+        }, response, 'Returned driver');
+        t.end();
+      });
+    });
+
+    t.test('test GetDriver get unexisting driver operation', function (t) {
+      var request = Request(server)
+        .get('/drivers/dr_unexisting')
+        .end(function (err, res) {
           t.error(err, 'No error');
-          t.ok(res.statusCode === 200, 'Ok response status');
-          var Validator = require('is-my-json-valid');
-          var validate = Validator(api.paths['/drivers/{driverId}']['get']['responses']['200']['schema']);
+          t.equals(404, res.statusCode, 'response status');
           var response = res.body;
-          if (Object.keys(response).length <= 0) {
-            response = res.text;
-          }
-          t.ok(validate(response), 'Valid response');
-          t.error(validate.errors, 'No validation errors');
+          t.same( 'The driver does not exist. dr_unexisting', response, 'Returned driver');
           t.end();
         });
-      });
+    });
+    t.test('closing mongo connection', function(t){
+      mongoose.disconnect();
+      t.end();
     });
   });
 });

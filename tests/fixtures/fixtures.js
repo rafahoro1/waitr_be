@@ -64,14 +64,14 @@ function fillCollectionLocations() {
 
 
 function fillCollectionDrivers() {
-  return Location.find().then(function (locations) {
+  return Location.find({},undefined,{sort:{latitude:1}}).then(function (locations) {
     let saveItems = [];
-    drivers.forEach((drv)=> {
-      let loc = locations[Math.floor(Math.random() * locations.length)];
+    drivers.forEach((drv, idx)=> {
+      let loc = locations[Math.floor(idx % locations.length)];
       drv.current_location_id = loc._id;
-      console.log('saving ' + JSON.stringify(drv));
+      //console.log('saving ' + JSON.stringify(drv));
       let item = new Driver(drv);
-      console.log('item ' + JSON.stringify(item));
+      //console.log('item ' + JSON.stringify(item));
       saveItems.push(item.save());
     });
     return Q.all(saveItems);
@@ -113,6 +113,7 @@ mongoose.connection.on('connected', function () {
       return fillCollectionDrivers();
     })
     .then(function () {
+
       return fillCollectionReviews();
     })
     .then(function () {
