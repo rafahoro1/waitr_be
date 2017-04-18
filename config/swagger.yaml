@@ -51,7 +51,7 @@ paths:
             $ref: '#/definitions/DriverReviewList'
         '404':
           description: The driver does not exist.
-  '/drivers/{driverId}deliveries/{deliveryId}/review':
+  '/drivers/{driverId}/deliveries/{deliveryId}/review':
     parameters:
       - $ref: '#/parameters/driverId'
       - $ref: '#/parameters/deliveryId'
