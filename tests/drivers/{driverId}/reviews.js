@@ -5,7 +5,7 @@ var Swaggerize = require('swaggerize-restify');
 var Path = require('path');
 var Request = require('supertest');
 var Parser = require('swagger-parser');
-var mongoose= require('../../../data/dbConnection.js').mongoose;
+var mongoose = require('../../../data/dbConnection.js').mongoose;
 
 /**
  * Test for /drivers/{driverId}/reviews
@@ -22,16 +22,9 @@ Test('/drivers/{driverId}/reviews', function (t) {
   Parser.validate(apiPath, function (err, api) {
     t.error(err, 'No parse error');
     t.ok(api, 'Valid swagger api');
-    /**
-     * summary:
-     * description:
-     * parameters:
-     * produces:
-     * responses: 200, 404
-     */
 
     t.test('test GetDriverReviews get operation', function (t) {
-      var request = Request(server)
+      Request(server)
         .get('/drivers/dr_3/reviews')
         .end(function (err, res) {
           t.error(err, 'No error');
@@ -52,19 +45,19 @@ Test('/drivers/{driverId}/reviews', function (t) {
     });
 
     t.test('test GetDriverReviews get unexisting driver operation', function (t) {
-      var request = Request(server)
+      Request(server)
         .get('/drivers/dr_unexisting/reviews')
         .end(function (err, res) {
           t.error(err, 'No error');
           t.equals(404, res.statusCode, 'response status');
           var response = res.body;
-          t.same( 'The driver does not exist. dr_unexisting', response, 'Returned reviews');
+          t.same('The driver does not exist. dr_unexisting', response, 'Returned reviews');
           t.end();
         });
     });
 
     t.test('test GetDriverReviews get driver without reviews operation', function (t) {
-      var request = Request(server)
+      Request(server)
         .get('/drivers/dr_nr/reviews')
         .end(function (err, res) {
           t.error(err, 'No error');
@@ -79,7 +72,7 @@ Test('/drivers/{driverId}/reviews', function (t) {
         });
     });
 
-    t.test('closing mongo connection', function(t){
+    t.test('closing mongo connection', function (t) {
       mongoose.disconnect();
       t.end();
     });
