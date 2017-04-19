@@ -128,7 +128,7 @@ mongoose.connection.on('connected', function () {
       return item.save();
     })
     .then(function () {
-      mongoose.disconnect();
+      return mongoose.disconnect();
     })
     .catch(function (error) {
       console.error(error);

@@ -74,9 +74,10 @@ Test('/drivers/{driverId}', function (t) {
           t.end();
         });
     });
-    t.test('closing mongo connection', function (t) {
-      mongoose.disconnect();
-      t.end();
-    });
   });
+});
+
+
+Test.onFinish(function(){
+  mongoose.disconnect();
 });

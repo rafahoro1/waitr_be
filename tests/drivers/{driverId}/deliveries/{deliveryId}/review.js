@@ -11,7 +11,7 @@ var mongoose = require('../../../../../data/dbConnection.js').mongoose;
 /**
  * Test for /drivers/{driverId}deliveries/{deliveryId}/review
  */
-Test('/drivers/{driverId}deliveries/{deliveryId}/review', function (t) {
+Test('/drivers/{driverId}/deliveries/{deliveryId}/review', function (t) {
   var apiPath = Path.resolve(__dirname, '../../../../../config/swagger.yaml');
   var server = Restify.createServer();
   server.use(Restify.bodyParser());
@@ -28,8 +28,9 @@ Test('/drivers/{driverId}deliveries/{deliveryId}/review', function (t) {
     t.test('test CreateDeliveryReview post operation', function (t) {
       const RATING = 3;
       const DESCRIPTION = 'desc for delivery';
+      const DELIVERY_ID= (new Date).getTime();
       Request(server)
-        .post('/drivers/dr_3/deliveries/del1/review')
+        .post('/drivers/dr_3/deliveries/'+DELIVERY_ID+'/review')
         .send({rating: RATING, description: DESCRIPTION})
         .end(function (err, res) {
           t.error(err, 'No error');
@@ -39,7 +40,7 @@ Test('/drivers/{driverId}deliveries/{deliveryId}/review', function (t) {
           var response = res.body;
           t.ok(validate(response), 'Valid response:');
           t.error(validate.errors, 'No validation errors');
-          t.same(response.deliveryId, 'del1', 'response deliveryId');
+          t.same(response.deliveryId, ''+DELIVERY_ID, 'response deliveryId');
           t.same(response.review.rating, RATING, 'response delivery.review.rating');
           t.same(response.review.description, DESCRIPTION, 'response delivery.review.description');
           t.end();
@@ -58,12 +59,10 @@ Test('/drivers/{driverId}deliveries/{deliveryId}/review', function (t) {
           t.end();
         });
     });
-
-
-    t.test('closing mongo connection', function (t) {
-      mongoose.disconnect();
-      t.end();
-    });
-
   });
+});
+
+
+Test.onFinish(function(){
+  mongoose.disconnect();
 });

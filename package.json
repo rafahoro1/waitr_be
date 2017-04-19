@@ -32,9 +32,10 @@
   },
   "scripts": {
     "test": "tape 'tests/drivers/**/*.js'",
-    "cover": "istanbul cover tape -- 'tests/**/*.js'",
+    "cover": "istanbul cover tape -- 'tests/drivers/**/*.js'",
     "lint": "eslint . --fix",
-    "regenerate": "yo swaggerize:test --framework restify --apiPath './config/swagger.yaml'"
+    "regenerate": "yo swaggerize:test --framework restify --apiPath './config/swagger.yaml'",
+    "mock":"node tests/fixtures/fixtures.js"
   },
   "generator-swaggerize": {
     "version": "3.1.0"

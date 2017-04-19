@@ -5,16 +5,16 @@ var Schema = mongoose.Schema;
 var driverSchema = mongoose.Schema({
   id: String,
   name: String,
-  current_location_id:{ type: Schema.Types.ObjectId, index: true }
+  current_location_id: {type: Schema.Types.ObjectId, index: true}
 });
 
 var locationSchema = mongoose.Schema({
   latitude: Number,
-  longitude:Number
+  longitude: Number
 });
 
 var reviewSchema = mongoose.Schema({
-  rating: { type: Number, min: 1, max: 5 },
+  rating: {type: Number, min: 1, max: 5},
   description: String
 });
 
@@ -24,14 +24,14 @@ var driverReviewSchema = mongoose.Schema({
 });
 
 /*
- The driver_id in this Schema is not strictly necessary, as we can get it from the Review + Driver collections
- anyway Im adding it here to make lookup faster.
- There is however a cons: it might be inconsistent/have invalid data.
- That can be checked with a cron, that checks the collections are consistent on the background
-*/
+ The driver_id in this Schema is not really used
+ Moreover: it might be inconsistent/have invalid data as no validation is done against it.
+ It's here only because we got the info in the CreateDeliveryReview method and may be usefull for future methods (Altough
+ probably makes more sense to define another schema DriverDelivery that binds a Driver with a Delivery).
+ */
 var deliveryReviewSchema = mongoose.Schema({
   driver_id: Schema.Types.ObjectId,
-  deliveryId: String, // the delivery collection is not defined in Swagger, so just storing the givenId
+  deliveryId: String, // the delivery collection (although defined in Swagger) is not used, so just storing the String
   review_id: Schema.Types.ObjectId
 });
 
@@ -42,11 +42,11 @@ var Review = mongoose.model('Review', reviewSchema);
 var DriverReview = mongoose.model('DriverReview', driverReviewSchema);
 var DeliveryReview = mongoose.model('DeliveryReview', deliveryReviewSchema);
 
-module.exports= {
-  Driver:Driver,
-  Location:Location,
-  Review:Review,
-  DriverReview:DriverReview,
-  DeliveryReview:DeliveryReview,
-  mongoose:mongoose
+module.exports = {
+  Driver: Driver,
+  Location: Location,
+  Review: Review,
+  DriverReview: DriverReview,
+  DeliveryReview: DeliveryReview,
+  mongoose: mongoose
 };
