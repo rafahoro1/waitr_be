@@ -8,6 +8,8 @@ var Server = Restify.createServer();
 
 Server.use(Restify.bodyParser());
 Server.use(Restify.queryParser());
+Server.use(Restify.CORS({'origins': ['http://localhost','http://localhost:9000']}));
+//Server.use(restify.CORS({'origins': ['http://localhost', 'https://domain.my.com']}));
 
 Server.get('/api', function (req, res) {
   res.send(200);
