@@ -43,7 +43,7 @@ After some clarifications (thanks Travis!!) about the challenge here are some no
  - **./data**: contains the DB related files. Including mongoose's schema definitions.
  - **./handlers**: contains the resource handlers. Ie the methods that will be finally called by a connecting client
  - **./server.js**: The main script. Starts a server to listen on port 8000, and using Swaggerize and Restify, redirects any connection to the right Handler
-  
+ - **./config/swagger.yaml** the swagger spec file provided for the challenge (with some typos fixes) 
   
 ## ToDo
  As usual, there are many improvements for this implementation that were left of.
