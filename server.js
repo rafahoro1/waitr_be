@@ -8,8 +8,11 @@ var Server = Restify.createServer();
 
 Server.use(Restify.bodyParser());
 Server.use(Restify.queryParser());
-Server.use(Restify.CORS({'origins': ['http://localhost','http://localhost:9000']}));
-//Server.use(restify.CORS({'origins': ['http://localhost', 'https://domain.my.com']}));
+
+// Note, for simplicity adding '*' to CORS. However for security you should put an IP here
+Server.use(Restify.CORS({'origins': ['*','http://localhost:9000', 'http://54.201.33.238:9000/']}));
+// This is a good example of a CORS setting:
+//Server.use(Restify.CORS({'origins': ['http://54.201.33.238']}));
 
 Server.get('/api', function (req, res) {
   res.send(200);
