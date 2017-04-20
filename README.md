@@ -49,7 +49,7 @@ After some clarifications (thanks Travis!!) about the challenge here are some no
  As usual, there are many improvements for this implementation that were left of.
 
   - Use [https://github.com/lorenwest/node-config](node-config) to remove hardcoded values (server port, DB connection, etc)
-  - Most collections have no resource handler to populate it, and instead are populated usint the fixtures.js script
+  - Most collections have no resource handler to populate it, and instead are populated using the fixtures.js script
   - The DeliveryReview schema, stores a String as ID for the delivery. As the specifications does not require an actual 
   Delivery collection and there is no resource handler to add data to such collection (nor to retrieve it), the collection 
   was not created and instead a String added as ID in the DeliveryReview schema. A full implementation will create the
@@ -57,5 +57,6 @@ After some clarifications (thanks Travis!!) about the challenge here are some no
   - The DeliveryReview schema, has a 'driver_id' field. That is not used, and probably a better implementation will be 
   to have that value in a second schema (ie: DeliveryDriver) that links a Delivery to a Driver. As that data came
   through the POST handler but was not necessary to use, I just added it to the DeliveryReview schema meanwhile.
+  - Better error handle/log.
   
   
