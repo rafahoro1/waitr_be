@@ -1,18 +1,18 @@
 # waitr -BE
 
 ## What is this?
-This is an mplementation (back-end part) of the [https://github.com/WaitrInc/coding-challenge/blob/master/coding_challenge.md]()
+This is an implementation (back-end part) of the [https://github.com/WaitrInc/coding-challenge/blob/master/coding_challenge.md]()
 
 I choose to implement the 'Delivery Review Service' according to the spec in [https://github.com/WaitrInc/coding-challenge/blob/master/specs/delivery_reviews.yaml]()
 
-## How to run
+## Build & development
 As usual, first run **npm install** to install every dependency.
 
 Then you have several scripts:
 
+ - **npm run mock**: Add data to the DB (the DB will be dropped and re-created). Run first, so the DB has some data when you start the FrontEnd.
  - **npm start**: to start the server. Will listen on port 8000
- - **npm run mock**: to add mock data to the DB (necessary before the test). Note: the DB will be dropped and re-created.
- - **npm test**: to run the tests (you must run 'npm mock' at least once before, so the DB has the mock data in it).
+ - **npm test**: to run the tests (you must run 'npm mock' before, so the DB has the mock data in it).
  - **npm run cover**: to run test coverage
 
 About coverage: the only method that is not covered is "mongoose.connection.on('disconnected',...)". Every other method is 
@@ -48,15 +48,15 @@ After some clarifications (thanks Travis!!) about the challenge here are some no
 ## ToDo
  As usual, there are many improvements for this implementation that were left of.
 
-  - Use [https://github.com/lorenwest/node-config](node-config) to remove hardcoded values (server port, DB connection, etc)
+  - Use [https://github.com/lorenwest/node-config](node-config) or similar to remove hardcoded values (server port, DB connection, CORS related string, etc)
   - Most collections have no resource handler to populate it, and instead are populated using the fixtures.js script
   - The DeliveryReview schema, stores a String as ID for the delivery. As the specifications does not require an actual 
   Delivery collection and there is no resource handler to add data to such collection (nor to retrieve it), the collection 
   was not created and instead a String added as ID in the DeliveryReview schema. A full implementation will create the
   Delivery collection.
-  - The DeliveryReview schema, has a 'driver_id' field. That is not used, and probably a better implementation will be 
+  - The DeliveryReview schema, has a 'driver_id' field. A better implementation will be 
   to have that value in a second schema (ie: DeliveryDriver) that links a Delivery to a Driver. As that data came
   through the POST handler but was not necessary to use, I just added it to the DeliveryReview schema meanwhile.
-  - Better error handle/log.
+  - Better error handling/log.
   
   
