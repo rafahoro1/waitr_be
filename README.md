@@ -12,7 +12,7 @@ Then you have several scripts:
 
  - **npm run mock**: Add data to the DB (the DB will be dropped and re-created). Run first, so the DB has some data when you start the FrontEnd.
  - **npm start**: to start the server. Will listen on port 8000
- - **npm test**: to run the tests (you must run 'npm mock' before, so the DB has the mock data in it).
+ - **npm test**: to run the tests (you must run 'npm run mock' before, so the DB has the mock data in it).
  - **npm run cover**: to run test coverage
 
 About coverage: the only method that is not covered is "mongoose.connection.on('disconnected',...)". Every other method is 
