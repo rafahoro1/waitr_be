@@ -24,10 +24,10 @@ var driverReviewSchema = mongoose.Schema({
 });
 
 /*
- The driver_id in this Schema is not really used
- Moreover: it might be inconsistent/have invalid data as no validation is done against it.
- It's here only because we got the info in the CreateDeliveryReview method and may be usefull for future methods (Altough
- probably makes more sense to define another schema DriverDelivery that binds a Driver with a Delivery).
+ The driver_id in this Schema is not a good idea: it might be inconsistent/have invalid data as no validation is done against it.
+ In a real app, makes more sense to have a schema DriverDelivery that links a driver to a delivery, and then remove driver_id from this schema.
+ However as there is no resource/handler to create a DriverDelivery entry (and makes no sense to create such link only when a DeliveryReview entry is created)
+ I decided to add it in this table, as a simple implementation that meets the required yaml file
  */
 var deliveryReviewSchema = mongoose.Schema({
   driver_id: Schema.Types.ObjectId,
